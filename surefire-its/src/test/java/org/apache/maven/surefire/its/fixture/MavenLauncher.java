@@ -315,6 +315,21 @@ public final class MavenLauncher
                 String val = e.getValue();
                 goalsAndProps.add( val == null ? "-D" + key : "-D" + key + "=" + val );
             }
+            String jacocoAgent = System.getProperty( "jacoco.agent", "" );
+            if ( jacocoAgent.length() > 0 )
+            {
+                System.out.println( "jacocoAgent:" + jacocoAgent );
+                String mavenOpts = envVars.get( "MAVEN_OPTS" );
+                if ( mavenOpts == null )
+                {
+                    mavenOpts = jacocoAgent;
+                }
+                else
+                {
+                    mavenOpts += " " + jacocoAgent;
+                }
+                envVars.put( "MAVEN_OPTS", mavenOpts );
+            }
 
             getVerifier().setCliOptions( cliOptions );
             getVerifier().executeGoals( goalsAndProps, envVars );

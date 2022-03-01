@@ -97,7 +97,7 @@
     <mavenSharedUtilsVersion>3.3.4</mavenSharedUtilsVersion>
     <powermockVersion>2.0.9</powermockVersion>
     <mavenPluginToolsVersion>3.6.2</mavenPluginToolsVersion>
-    <jacocoVersion>0.8.7</jacocoVersion>
+    <jacoco.version>0.8.7</jacoco.version>
     <surefire-shared-utils.version>${project.version}</surefire-shared-utils.version>
     <maven.surefire.scm.devConnection>scm:git:https://gitbox.apache.org/repos/asf/maven-surefire.git</maven.surefire.scm.devConnection>
     <maven.site.path>surefire-archives/surefire-LATEST</maven.site.path>
@@ -334,7 +334,7 @@
         <groupId>org.jacoco</groupId>
         <artifactId>org.jacoco.agent</artifactId>
         <classifier>runtime</classifier>
-        <version>${jacocoVersion}</version>
+        <version>${jacoco.version}</version>
       </dependency>
       <dependency>
         <groupId>com.googlecode.junit-toolbox</groupId>
@@ -465,7 +465,7 @@
         <plugin>
           <groupId>org.jacoco</groupId>
           <artifactId>jacoco-maven-plugin</artifactId>
-          <version>${jacocoVersion}</version>
+          <version>${jacoco.version}</version>
           <configuration>
             <skip>${skipTests}</skip>
             <!--<append>true</append>
@@ -476,16 +476,15 @@
               <format>HTML</format>
             </formats>
             <includes>
-              <include>**/failsafe/*</include>
-              <include>**/failsafe/**/*</include>
-              <include>**/surefire/*</include>
-              <include>**/surefire/**/*</include>
+              <include>org/apache/maven/plugin/failsafe/**</include>
+              <include>org/apache/maven/plugin/surefire/**</include>
+              <include>org/apache/maven/plugins/surefire/**</include>
+              <include>org/apache/surefire/**</include>
+              <include>org/apache/maven/surefire/**</include>
             </includes>
             <excludes>
               <exclude>**/HelpMojo.class</exclude>
               <exclude>**/shadefire/**/*</exclude>
-              <exclude>org/jacoco/**/*</exclude>
-              <exclude>com/vladium/emma/rt/*</exclude>
             </excludes>
           </configuration>
         </plugin>

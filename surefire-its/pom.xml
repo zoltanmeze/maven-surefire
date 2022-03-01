@@ -231,6 +231,11 @@
                                 <artifactId>surefire-junit47</artifactId>
                                 <version>3.0.0-M5</version> <!-- ${shadedVersion}, but resolved due to https://issues.apache.org/jira/browse/MRELEASE-799 -->
                             </dependency>
+                          <dependency>
+                            <groupId>org.jacoco</groupId>
+                            <artifactId>org.jacoco.agent</artifactId>
+                            <version>${jacoco.version}</version>
+                          </dependency>
                         </dependencies>
                         <executions>
                             <execution>
