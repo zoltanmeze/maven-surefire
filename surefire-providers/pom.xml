@@ -33,6 +33,10 @@
   <name>SureFire Providers</name>
   <description>SureFire Providers Aggregator POM</description>
 
+  <properties>
+    <jacoco.agent></jacoco.agent>
+  </properties>
+
   <modules>
     <module>common-junit3</module>
     <module>common-java5</module>
@@ -58,6 +62,9 @@
     <plugins>
       <plugin>
         <artifactId>maven-surefire-plugin</artifactId>
+        <configuration>
+          <argLine>${jvm.args.tests} ${jacoco.agent}</argLine>
+        </configuration>
         <dependencies>
           <dependency>
             <groupId>org.apache.maven.surefire</groupId>
@@ -68,5 +75,28 @@
       </plugin>
     </plugins>
   </build>
+
+  <profiles>
+    <profile>
+      <id>ci-reporting</id>
+      <properties>
+        <jacoco.propertyName>jacoco.agent</jacoco.propertyName>
+      </properties>
+      <build>
+        <pluginManagement>
+          <plugins>
+            <plugin>
+              <groupId>org.apache.maven.plugins</groupId>
+              <artifactId>maven-surefire-plugin</artifactId>
+              <configuration>
+                <argLine>${jvm.args.tests} ${jacoco.agent}</argLine>
+              </configuration>
+            </plugin>
+          </plugins>
+        </pluginManagement>
+      </build>
+    </profile>
+  </profiles>
+
 </project>
 

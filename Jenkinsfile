@@ -32,7 +32,7 @@ properties(
 final def oses = ['linux':'ubuntu && maven', 'windows':'windows-he']
 final def mavens = env.BRANCH_NAME == 'master' ? ['3.6.x', '3.2.x'] : ['3.2.x']
 // all non-EOL versions and the first EA
-final def jdks = [18, 17, 11, 8]
+final def jdks = [8, 11, 17, 18]
 
 final def options = ['-e', '-V', '-B', '-nsu', '-P', 'run-its']
 final def goals = ['clean', 'install']
@@ -133,6 +133,10 @@ def buildProcess(String stageKey, String jdkName, String mvnName, goals, options
 
         def properties = ["-Djacoco.skip=${!makeReports}", "\"-Dmaven.repo.local=${mvnLocalRepoDir}\""]
         def cmd = ['mvn'] + goals + options + properties
+        if (makeReports) {
+            cmd = cmd + ["-Pci-reporting", "-Perrorprone", "-U"] // -U can be remove once parent with ci-reporting profile released
+        }
+
 
         stage("build ${stageKey}") {
 
@@ -173,6 +177,11 @@ def buildProcess(String stageKey, String jdkName, String mvnName, goals, options
     } finally {
         try {
             if (makeReports) {
+
+                recordIssues id: "${os}-jdk${jdk}", name: "Static Analysis",
+		           aggregatingResults: true, enabledForFailure: true,
+		           tools: [mavenConsole(), java(), checkStyle(), spotBugs(), pmdParser(), errorProne(),tagList()]
+
                 jacoco(changeBuildStatus: false,
                         execPattern: '**/target/jacoco*.exec',
                         sourcePattern: sourcesPatternCsv(),

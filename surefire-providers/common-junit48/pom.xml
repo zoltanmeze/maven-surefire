@@ -53,21 +53,6 @@
     <build>
         <plugins>
             <plugin>
-                <groupId>org.jacoco</groupId>
-                <artifactId>jacoco-maven-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>jacoco-agent</id>
-                        <goals>
-                            <goal>prepare-agent</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <configuration>
-                    <propertyName>jacoco.agent</propertyName>
-                </configuration>
-            </plugin>
-            <plugin>
                 <artifactId>maven-dependency-plugin</artifactId>
                 <executions>
                     <execution>
@@ -158,17 +143,6 @@
                         </configuration>
                     </execution>
                 </executions>
-                <configuration>
-                    <argLine>${jvm.args.tests} ${jacoco.agent}</argLine>
-                </configuration>
-                <dependencies>
-                    <dependency>
-                        <groupId>org.apache.maven.surefire</groupId>
-                        <artifactId>surefire-shadefire</artifactId>
-                        <version>3.0.0-M4
-                        </version> <!-- ${shadedVersion}, but resolved due to https://issues.apache.org/jira/browse/MRELEASE-799 -->
-                    </dependency>
-                </dependencies>
             </plugin>
         </plugins>
     </build>

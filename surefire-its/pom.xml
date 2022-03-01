@@ -34,6 +34,7 @@
 
     <properties>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+      <jacoco-it.agent></jacoco-it.agent>
     </properties>
 
     <dependencies>
@@ -159,27 +160,6 @@
                 </configuration>
             </plugin>
             <plugin>
-                <groupId>org.jacoco</groupId>
-                <artifactId>jacoco-maven-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>jacoco-agent</id>
-                        <goals>
-                            <goal>prepare-agent</goal>
-                        </goals>
-                    </execution>
-                    <execution>
-                        <id>jacoco-agent-it</id>
-                        <goals>
-                            <goal>prepare-agent-integration</goal>
-                        </goals>
-                        <configuration>
-                            <propertyName>jacoco-it.agent</propertyName>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
                 <artifactId>maven-install-plugin</artifactId>
                 <configuration>
                     <skip>true</skip>
@@ -249,5 +229,66 @@
                 </plugins>
             </build>
         </profile>
+      <profile>
+        <id>ci-reporting</id>
+        <properties>
+          <jacoco.propertyName>jacoco.agent</jacoco.propertyName>
+        </properties>
+        <build>
+          <pluginManagement>
+            <plugins>
+              <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <configuration>
+                  <argLine>${jvm.args.tests} ${jacoco.agent}</argLine>
+                </configuration>
+              </plugin>
+            </plugins>
+          </pluginManagement>
+          <plugins>
+            <plugin>
+              <groupId>org.jacoco</groupId>
+              <artifactId>jacoco-maven-plugin</artifactId>
+              <executions>
+                <execution>
+                  <id>jacoco-agent</id>
+                  <goals>
+                    <goal>prepare-agent</goal>
+                  </goals>
+                </execution>
+                <execution>
+                  <id>jacoco-agent-it</id>
+                  <goals>
+                    <goal>prepare-agent-integration</goal>
+                  </goals>
+                  <configuration>
+                    <propertyName>jacoco-it.agent</propertyName>
+                  </configuration>
+                </execution>
+              </executions>
+            </plugin>
+
+            <plugin>
+              <artifactId>maven-failsafe-plugin</artifactId>
+              <configuration>
+                <systemPropertyVariables>
+                  <jacoco.agent>${jacoco-it.agent}</jacoco.agent>
+                </systemPropertyVariables>
+                <redirectTestOutputToFile>true</redirectTestOutputToFile>
+                <shutdown>kill</shutdown>
+              </configuration>
+              <dependencies>
+                <dependency>
+                  <groupId>org.jacoco</groupId>
+                  <artifactId>org.jacoco.agent</artifactId>
+                  <version>${jacoco.version}</version>
+                </dependency>
+              </dependencies>
+            </plugin>
+
+          </plugins>
+        </build>
+      </profile>
     </profiles>
 </project>

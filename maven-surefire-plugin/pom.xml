@@ -41,6 +41,7 @@
     <properties>
         <thisPlugin>Surefire</thisPlugin>
         <thatPlugin>Failsafe</thatPlugin>
+      <jacoco.agent></jacoco.agent>
     </properties>
 
     <dependencies>
@@ -66,21 +67,6 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-plugin-plugin</artifactId>
-            </plugin>
-            <plugin>
-                <groupId>org.jacoco</groupId>
-                <artifactId>jacoco-maven-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>jacoco-agent</id>
-                        <goals>
-                            <goal>prepare-agent</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <configuration>
-                    <propertyName>jacoco.agent</propertyName>
-                </configuration>
             </plugin>
             <plugin>
                 <artifactId>maven-surefire-plugin</artifactId>
@@ -189,5 +175,24 @@
                 </plugins>
             </reporting>
         </profile>
+      <profile>
+        <id>ci-reporting</id>
+        <properties>
+          <jacoco.propertyName>jacoco.agent</jacoco.propertyName>
+        </properties>
+        <build>
+          <pluginManagement>
+            <plugins>
+              <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <configuration>
+                  <argLine>${jvm.args.tests} ${jacoco.agent}</argLine>
+                </configuration>
+              </plugin>
+            </plugins>
+          </pluginManagement>
+        </build>
+      </profile>
     </profiles>
 </project>

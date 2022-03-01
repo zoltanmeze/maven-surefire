@@ -30,6 +30,10 @@
     <artifactId>surefire-extensions-api</artifactId>
     <name>Surefire Extensions API</name>
 
+    <properties>
+      <jacoco.agent></jacoco.agent>
+    </properties>
+
     <dependencies>
         <dependency>
             <groupId>org.apache.maven.surefire</groupId>
@@ -63,24 +67,9 @@
     <build>
         <plugins>
             <plugin>
-                <groupId>org.jacoco</groupId>
-                <artifactId>jacoco-maven-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>jacoco-agent</id>
-                        <goals>
-                            <goal>prepare-agent</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <configuration>
-                    <propertyName>jacoco.agent</propertyName>
-                </configuration>
-            </plugin>
-            <plugin>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <configuration>
-                    <argLine>${jvm.args.tests} ${jacoco.agent}</argLine>
+                    <argLine>${jvm.args.tests}</argLine>
                     <includes>
                         <include>**/JUnit4SuiteTest.java</include>
                     </includes>
@@ -98,4 +87,25 @@
             </plugin>
         </plugins>
     </build>
+  <profiles>
+    <profile>
+      <id>ci-reporting</id>
+      <properties>
+        <jacoco.propertyName>jacoco.agent</jacoco.propertyName>
+      </properties>
+      <build>
+        <pluginManagement>
+          <plugins>
+            <plugin>
+              <groupId>org.apache.maven.plugins</groupId>
+              <artifactId>maven-surefire-plugin</artifactId>
+              <configuration>
+                <argLine>${jvm.args.tests} ${jacoco.agent}</argLine>
+              </configuration>
+            </plugin>
+          </plugins>
+        </pluginManagement>
+      </build>
+    </profile>
+  </profiles>
 </project>

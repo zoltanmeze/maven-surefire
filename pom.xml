@@ -23,7 +23,7 @@
   <parent>
     <artifactId>maven-parent</artifactId>
     <groupId>org.apache.maven</groupId>
-    <version>34</version>
+    <version>99-SNAPSHOT</version>
   </parent>
 
   <groupId>org.apache.maven.surefire</groupId>
@@ -46,6 +46,17 @@
       <email>marvin@marvinformatics.com</email>
     </contributor>
   </contributors>
+
+  <repositories>
+    <repository><!-- useful to resolve parent pom when it is a SNAPSHOT -->
+      <id>apache.snapshots</id>
+      <name>Apache Snapshot Repository</name>
+      <url>https://repository.apache.org/snapshots</url>
+      <releases>
+        <enabled>false</enabled>
+      </releases>
+    </repository>
+  </repositories>
 
   <modules>
     <module>surefire-shared-utils</module>
@@ -97,7 +108,6 @@
     <mavenSharedUtilsVersion>3.3.4</mavenSharedUtilsVersion>
     <powermockVersion>2.0.9</powermockVersion>
     <mavenPluginToolsVersion>3.6.2</mavenPluginToolsVersion>
-    <jacoco.version>0.8.7</jacoco.version>
     <surefire-shared-utils.version>${project.version}</surefire-shared-utils.version>
     <maven.surefire.scm.devConnection>scm:git:https://gitbox.apache.org/repos/asf/maven-surefire.git</maven.surefire.scm.devConnection>
     <maven.site.path>surefire-archives/surefire-LATEST</maven.site.path>
