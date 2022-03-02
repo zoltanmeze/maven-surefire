@@ -62,7 +62,7 @@ oses.eachWithIndex { osMapping, indexOfOs ->
             stages[stageKey] = {
                 node(label) {
                     timestamps {
-                        boolean first = indexOfOs == 0 && indexOfMaven == 0 && indexOfJdk == 0
+                        boolean makeReports = indexOfOs == 0 && indexOfMaven == 0 && indexOfJdk == 0
                         def failsafeItPort = 8000 + 100 * indexOfMaven + 10 * indexOfJdk
                         def allOptions = options + ['-Djava.awt.headless=true', "-Dfailsafe-integration-test-port=${failsafeItPort}", "-Dfailsafe-integration-test-stop-port=${1 + failsafeItPort}"]
 
@@ -72,7 +72,7 @@ oses.eachWithIndex { osMapping, indexOfOs ->
                         ws(dir: "${os == 'windows' ? "${TEMP}\\${BUILD_TAG}" : pwd()}") {
                             buildProcess(stageKey, jdkName, mvnName,
                                 first  && env.BRANCH_NAME == 'master' ? goalsDepl : goals,
-                                allOptions, mavenOpts, first)
+                                allOptions, mavenOpts, makeReports)
                         }
                     }
                 }
@@ -135,13 +135,13 @@ def buildProcess(String stageKey, String jdkName, String mvnName, goals, options
         def properties = ["-Djacoco.skip=${!makeReports}", "\"-Dmaven.repo.local=${mvnLocalRepoDir}\""]
         def cmd = ['mvn'] + goals + options + properties
         if (makeReports) {
-            cmd = cmd + ["-Pci-reporting", "-Perrorprone", "-U"] // -U can be remove once parent with ci-reporting profile released
+            cmd = cmd + "-Pci-reporting" + "-Perrorprone" + "-U" // -U can be remove once parent with ci-reporting profile released
         }
 
 
         stage("build ${stageKey}") {
 
-             println "NODE_NAME = ${env.NODE_NAME}"
+             echo "NODE_NAME = ${env.NODE_NAME}, stageKey: ${stageKey}, makeReports" + makeReports
 
              checkout scm
 
@@ -179,6 +179,7 @@ def buildProcess(String stageKey, String jdkName, String mvnName, goals, options
         try {
             if (makeReports) {
 
+                echo "finally clause and makeReports branch"
                 recordIssues id: "${os}-jdk${jdk}", name: "Static Analysis",
 		           aggregatingResults: true, enabledForFailure: true,
 		           tools: [mavenConsole(), java(), checkStyle(), spotBugs(), pmdParser(), errorProne(),tagList()]
