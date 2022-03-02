@@ -71,7 +71,7 @@ oses.eachWithIndex { osMapping, indexOfOs ->
                         }
                         ws(dir: "${os == 'windows' ? "${TEMP}\\${BUILD_TAG}" : pwd()}") {
                             buildProcess(stageKey, jdkName, mvnName,
-                                first  && env.BRANCH_NAME == 'master' ? goalsDepl : goals,
+                                makeReports  && env.BRANCH_NAME == 'master' ? goalsDepl : goals,
                                 allOptions, mavenOpts, makeReports)
                         }
                     }
