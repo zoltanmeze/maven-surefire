@@ -32,7 +32,8 @@ properties(
 final def oses = ['linux':'ubuntu && maven', 'windows':'windows-he']
 final def mavens = env.BRANCH_NAME == 'master' ? ['3.8.x', '3.2.x'] : ['3.8.x']
 // all non-EOL versions and the first EA
-final def jdks = [8, 11, 17, 18]
+// make 11 first for ci-reporting to avoid too complicated script
+final def jdks = [11, 8, 11, 17, 18]
 
 final def options = ['-e', '-V', '-B', '-nsu', '-P', 'run-its']
 final def goals = ['clean', 'install']
