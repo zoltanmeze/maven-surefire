@@ -63,7 +63,7 @@ oses.eachWithIndex { osMapping, indexOfOs ->
                 node(label) {
                     timestamps {
                         boolean makeReports = indexOfOs == 0 && indexOfMaven == 0 && indexOfJdk == 0
-                        echo "makeReports: " + makeReports + ", indexOfOs:" + indexOfOs + ", indexOfMaven:" + indexOfMaven + ", indexOfJdk:" + indexOfJdk"
+                        echo "makeReports: " + makeReports + ", indexOfOs:" + indexOfOs + ", indexOfMaven:" + indexOfMaven + ", indexOfJdk:" + indexOfJdk
                         def failsafeItPort = 8000 + 100 * indexOfMaven + 10 * indexOfJdk
                         def allOptions = options + ['-Djava.awt.headless=true', "-Dfailsafe-integration-test-port=${failsafeItPort}", "-Dfailsafe-integration-test-stop-port=${1 + failsafeItPort}"]
 
