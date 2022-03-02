@@ -43,7 +43,7 @@ final Map stages = [:]
 oses.eachWithIndex { osMapping, indexOfOs ->
     mavens.eachWithIndex { maven, indexOfMaven ->
         jdks.eachWithIndex { jdk, indexOfJdk ->
-            def os = osMapping.key
+            def os = oses[indexOfOs]
             def label = osMapping.value
             final String jdkName = jenkinsEnv.jdkFromVersion(os, jdk.toString())
             final String mvnName = jenkinsEnv.mvnFromVersion(os, maven)
@@ -142,7 +142,7 @@ def buildProcess(String stageKey, String jdkName, String mvnName, goals, options
 
         stage("build ${stageKey}") {
 
-             echo "NODE_NAME = ${env.NODE_NAME}, stageKey: ${stageKey}, makeReports:" + makeReports
+             echo "NODE_NAME = ${env.NODE_NAME}, stageKey: " + stageKey +", makeReports:" + makeReports
 
              checkout scm
 
