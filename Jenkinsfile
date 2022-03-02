@@ -44,7 +44,7 @@ oses.eachWithIndex { osMapping, indexOfOs ->
     mavens.eachWithIndex { maven, indexOfMaven ->
         jdks.eachWithIndex { jdk, indexOfJdk ->
             def os = oses[indexOfOs]
-            def label = osMapping.value
+            def label = os
             final String jdkName = jenkinsEnv.jdkFromVersion(os, jdk.toString())
             final String mvnName = jenkinsEnv.mvnFromVersion(os, maven)
             final String stageKey = "${os}-jdk${jdk}-maven${maven}"
