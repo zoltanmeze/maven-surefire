@@ -29,7 +29,7 @@ properties(
         disableConcurrentBuilds()
     ]
 )
-final def oses = ['linux', 'windows']
+final def oses = ['ubuntu', 'windows']
 final def mavens = env.BRANCH_NAME == 'master' ? ['3.8.x', '3.2.x'] : ['3.8.x']
 // all non-EOL versions and the first EA
 // make 11 first for ci-reporting to avoid too complicated script
