@@ -29,7 +29,7 @@ properties(
         disableConcurrentBuilds()
     ]
 )
-final def oses = ['ubuntu', 'windows']
+final def oses = ['linux', 'windows']
 final def mavens = env.BRANCH_NAME == 'master' ? ['3.8.x', '3.2.x'] : ['3.8.x']
 // all non-EOL versions and the first EA
 // make 11 first for ci-reporting to avoid too complicated script
@@ -44,7 +44,7 @@ oses.eachWithIndex { osMapping, indexOfOs ->
     mavens.eachWithIndex { maven, indexOfMaven ->
         jdks.eachWithIndex { jdk, indexOfJdk ->
             def os = oses[indexOfOs]
-            def label = os
+            def label = jenkinsEnv.labelForOS(os)
             final String jdkName = jenkinsEnv.jdkFromVersion(os, jdk.toString())
             final String mvnName = jenkinsEnv.mvnFromVersion(os, maven)
             final String stageKey = "${os}-jdk${jdk}-maven${maven}"
