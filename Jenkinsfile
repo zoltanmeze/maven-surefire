@@ -29,11 +29,11 @@ properties(
         disableConcurrentBuilds()
     ]
 )
-final def oses = ['linux', 'windows']
+final def oses = ['linux']//, 'windows']
 final def mavens = env.BRANCH_NAME == 'master' ? ['3.8.x', '3.2.x'] : ['3.8.x']
 // all non-EOL versions and the first EA
 // make 11 first for ci-reporting to avoid too complicated script
-final def jdks = [11, 8, 17, 18]
+final def jdks = [11]//, 8, 17, 18]
 
 final def options = ['-e', '-V', '-B', '-nsu', '-P', 'run-its']
 final def goals = ['clean', 'install']
@@ -190,7 +190,7 @@ def buildProcess(String stageKey, String jdkName, String mvnName, goals, options
                   throw e
                 }
                 jacoco  changeBuildStatus: false,
-                        inclusionPattern: '**/org/apache/maven/**/*.class'
+                        inclusionPattern: '**/org/apache/maven/**/*.class',
                         execPattern: '**/target/jacoco*.exec',
                         classPattern: classPatternCsv()),
                         sourcePattern: sourcesPatternCsv()
