@@ -182,7 +182,7 @@ def buildProcess(String stageKey, String jdkName, String mvnName, goals, options
 
                 try {
                     echo "finally clause and makeReports branch stageKey ${stageKey}"
-                    recordIssues id: "${stageKey}", name: "Static Analysis",
+                    recordIssues id: "Static Analysis", name: "Static Analysis",
                        aggregatingResults: true, enabledForFailure: true,
                        tools: [mavenConsole(), java(), checkStyle(), spotBugs(), pmdParser(), errorProne(),tagList()]
                 } catch (Throwable e) {
