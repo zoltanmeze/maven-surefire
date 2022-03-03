@@ -180,11 +180,15 @@ def buildProcess(String stageKey, String jdkName, String mvnName, goals, options
         try {
             if (makeReports) {
 
-                echo "finally clause and makeReports branch stageKey ${stageKey}"
-                recordIssues id: "${stageKey}", name: "Static Analysis",
-		           aggregatingResults: true, enabledForFailure: true,
-		           tools: [mavenConsole(), java(), checkStyle(), spotBugs(), pmdParser(), errorProne(),tagList()]
-
+                try {
+                    echo "finally clause and makeReports branch stageKey ${stageKey}"
+                    recordIssues id: "${stageKey}", name: "Static Analysis",
+                       aggregatingResults: true, enabledForFailure: true,
+                       tools: [mavenConsole(), java(), checkStyle(), spotBugs(), pmdParser(), errorProne(),tagList()]
+                } catch (Throwable e) {
+                  println "Throwable: ${e}"
+                  throw e
+                }
                 jacoco(changeBuildStatus: false,
                         execPattern: '**/target/jacoco*.exec',
                         sourcePattern: sourcesPatternCsv(),
