@@ -33,7 +33,7 @@ final def oses = ['linux', 'windows']
 final def mavens = env.BRANCH_NAME == 'master' ? ['3.8.x', '3.2.x'] : ['3.8.x']
 // all non-EOL versions and the first EA
 // make 11 first for ci-reporting to avoid too complicated script
-final def jdks = [11, 8, 11, 17, 18]
+final def jdks = [11, 8, 17, 18]
 
 final def options = ['-e', '-V', '-B', '-nsu', '-P', 'run-its']
 final def goals = ['clean', 'install']
@@ -53,11 +53,11 @@ oses.eachWithIndex { osMapping, indexOfOs ->
             mavenOpts += (os == 'linux' ? ' -Xmx1g' : ' -Xmx256m')
 
             if (label == null || jdkName == null || mvnName == null) {
-                println "Skipping ${stageKey} as unsupported by Jenkins Environment."
+                echo "Skipping ${stageKey} as unsupported by Jenkins Environment."
                 return
             }
 
-            println "${stageKey}  ==>  Label: ${label}, JDK: ${jdkName}, Maven: ${mvnName}."
+            echo "${stageKey}  ==>  Label: ${label}, JDK: ${jdkName}, Maven: ${mvnName}."
 
             stages[stageKey] = {
                 node(label) {
