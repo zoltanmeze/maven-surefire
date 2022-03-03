@@ -189,10 +189,11 @@ def buildProcess(String stageKey, String jdkName, String mvnName, goals, options
                   println "Throwable: ${e}"
                   throw e
                 }
-                jacoco(changeBuildStatus: false,
+                jacoco  changeBuildStatus: false,
+                        inclusionPattern: '**/org/apache/maven/**/*.class'
                         execPattern: '**/target/jacoco*.exec',
-                        sourcePattern: sourcesPatternCsv(),
-                        classPattern: classPatternCsv())
+                        classPattern: classPatternCsv()),
+                        sourcePattern: sourcesPatternCsv()
 
                 junit(healthScaleFactor: 0.0,
                         allowEmptyResults: true,
