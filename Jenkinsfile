@@ -133,7 +133,7 @@ def buildProcess(String stageKey, String jdkName, String mvnName, goals, options
         println "Maven Local Repository = ${mvnLocalRepoDir}."
         assert mvnLocalRepoDir != null : 'Local Maven Repository is undefined.'
 
-        def properties = ["-Djacoco.skip=${!makeReports}", "\"-Dmaven.repo.local=${mvnLocalRepoDir}\""]
+        def properties = ["\"-Dmaven.repo.local=${mvnLocalRepoDir}\""]
         def cmd = ['mvn'] + goals + options + properties
         if (makeReports) {
             cmd = cmd + "-Pci-reporting" + "-Perrorprone" + "-U" // -U can be remove once parent with ci-reporting profile released
@@ -182,7 +182,7 @@ def buildProcess(String stageKey, String jdkName, String mvnName, goals, options
 
                 try {
                     echo "finally clause and makeReports branch stageKey ${stageKey}"
-                    recordIssues id: "Static Analysis", name: "Static Analysis",
+                    recordIssues id: "StaticAnalysis", name: "Static Analysis",
                        aggregatingResults: true, enabledForFailure: true,
                        tools: [mavenConsole(), java(), checkStyle(), spotBugs(), pmdParser(), errorProne(),tagList()]
                 } catch (Throwable e) {
