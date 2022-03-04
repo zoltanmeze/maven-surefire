@@ -85,13 +85,6 @@
         <resources>
             <resource>
                 <directory>src/test/resources</directory>
-                <targetPath>${project.build.outputDirectory}</targetPath>
-                <excludes>
-                    <exclude>toolchains.xml</exclude>
-                </excludes>
-            </resource>
-            <resource>
-                <directory>src/test/resources</directory>
                 <filtering>true</filtering>
                 <targetPath>${project.build.directory}/private</targetPath>
                 <includes>
