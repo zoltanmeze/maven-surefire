@@ -116,6 +116,8 @@
     <jvm9ArgsTests/>
     <jvm.args.tests>${jvm9ArgsTests} -Xms32m -Xmx144m -XX:SoftRefLRUPolicyMSPerMB=50 -Djava.awt.headless=true -Djdk.net.URLClassPath.disableClassPathURLCheck=true</jvm.args.tests>
     <project.build.outputTimestamp>2020-06-10T18:16:37Z</project.build.outputTimestamp>
+    <!-- FIXME using 3.0.0-M5 breaks everything -->
+    <surefire.version.used>3.0.0-M4</surefire.version.used>
   </properties>
 
   <dependencyManagement>
@@ -436,7 +438,7 @@
         </plugin>
         <plugin>
           <artifactId>maven-surefire-plugin</artifactId>
-          <version>3.0.0-M4</version> <!-- ${shadedVersion}, but resolved due to https://issues.apache.org/jira/browse/MRELEASE-799 -->
+          <version>${surefire.version.used}</version> <!-- ${shadedVersion}, but resolved due to https://issues.apache.org/jira/browse/MRELEASE-799 -->
           <configuration>
             <!-- NOTE: Be sure to isolate the Surefire version under test from the version running the tests! -->
             <useSystemClassLoader>false</useSystemClassLoader>
@@ -451,6 +453,11 @@
             <preparationGoals>clean install</preparationGoals>
             <commitByProject>false</commitByProject>
           </configuration>
+        </plugin>
+        <plugin>
+          <groupId>org.codehaus.plexus</groupId>
+          <artifactId>plexus-component-metadata</artifactId>
+          <version>2.1.1</version>
         </plugin>
         <plugin>
           <artifactId>maven-plugin-plugin</artifactId>
@@ -614,10 +621,6 @@
         </configuration>
       </plugin>
       <plugin>
-        <groupId>org.jacoco</groupId>
-        <artifactId>jacoco-maven-plugin</artifactId>
-      </plugin>
-      <plugin>
         <artifactId>maven-deploy-plugin</artifactId>
         <configuration>
           <deployAtEnd>true</deployAtEnd>
@@ -631,7 +634,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-surefire-report-plugin</artifactId>
-        <version>3.0.0-M4</version> <!-- ${shadedVersion}, but resolved due to https://issues.apache.org/jira/browse/MRELEASE-799 -->
+        <version>${surefire.version.used}</version> <!-- ${shadedVersion}, but resolved due to https://issues.apache.org/jira/browse/MRELEASE-799 -->
       </plugin>
     </plugins>
   </reporting>
@@ -677,6 +680,24 @@
           </plugin>
         </plugins>
       </reporting>
+    </profile>
+    <profile>
+      <id>ci-reporting</id>
+      <build>
+        <pluginManagement>
+          <plugins>
+            <plugin>
+              <groupId>org.apache.maven.plugins</groupId>
+              <artifactId>maven-surefire-plugin</artifactId>
+              <configuration>
+                <argLine>
+                  @{argLine} ${jvm.args.tests}
+                </argLine>
+              </configuration>
+            </plugin>
+          </plugins>
+        </pluginManagement>
+      </build>
     </profile>
   </profiles>
 </project>

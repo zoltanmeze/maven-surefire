@@ -111,11 +111,10 @@
                     <dependency>
                         <groupId>org.apache.maven.surefire</groupId>
                         <artifactId>surefire-shadefire</artifactId>
-                        <version>3.0.0-M4</version> <!-- ${shadedVersion}, but resolved due to https://issues.apache.org/jira/browse/MRELEASE-799 -->
+                        <version>${surefire.version.used}</version> <!-- ${shadedVersion}, but resolved due to https://issues.apache.org/jira/browse/MRELEASE-799 -->
                     </dependency>
                 </dependencies>
                 <configuration>
-                    <argLine>${jvm.args.tests}</argLine>
                     <includes>
                         <include>**/JUnit4SuiteTest.java</include>
                     </includes>
@@ -134,21 +133,4 @@
             </plugin>
         </plugins>
     </build>
-  <profiles>
-    <profile>
-      <id>ci-reporting</id>
-      <build>
-        <plugins>
-          <plugin>
-            <artifactId>maven-surefire-plugin</artifactId>
-            <configuration>
-              <systemPropertyVariables>
-                <jacoco-agent.destfile>${project.build.directory}/jacoco.exec</jacoco-agent.destfile>
-              </systemPropertyVariables>
-            </configuration>
-          </plugin>
-        </plugins>
-      </build>
-    </profile>
-  </profiles>
 </project>

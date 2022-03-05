@@ -30,10 +30,6 @@
     <artifactId>surefire-extensions-api</artifactId>
     <name>Surefire Extensions API</name>
 
-    <properties>
-      <jacoco.agent></jacoco.agent>
-    </properties>
-
     <dependencies>
         <dependency>
             <groupId>org.apache.maven.surefire</groupId>
@@ -69,7 +65,6 @@
             <plugin>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <configuration>
-                    <argLine>${jvm.args.tests}</argLine>
                     <includes>
                         <include>**/JUnit4SuiteTest.java</include>
                     </includes>
@@ -81,31 +76,11 @@
                     <dependency>
                         <groupId>org.apache.maven.surefire</groupId>
                         <artifactId>surefire-shadefire</artifactId>
-                        <version>3.0.0-M4</version> <!-- ${shadedVersion}, but resolved due to https://issues.apache.org/jira/browse/MRELEASE-799 -->
+                        <version>${surefire.version.used}</version> <!-- ${shadedVersion}, but resolved due to https://issues.apache.org/jira/browse/MRELEASE-799 -->
                     </dependency>
                 </dependencies>
             </plugin>
         </plugins>
     </build>
-  <profiles>
-    <profile>
-      <id>ci-reporting</id>
-      <properties>
-        <jacoco.propertyName>jacoco.agent</jacoco.propertyName>
-      </properties>
-      <build>
-        <pluginManagement>
-          <plugins>
-            <plugin>
-              <groupId>org.apache.maven.plugins</groupId>
-              <artifactId>maven-surefire-plugin</artifactId>
-              <configuration>
-                <argLine>${jvm.args.tests} ${jacoco.agent}</argLine>
-              </configuration>
-            </plugin>
-          </plugins>
-        </pluginManagement>
-      </build>
-    </profile>
-  </profiles>
+
 </project>

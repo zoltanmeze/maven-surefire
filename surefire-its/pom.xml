@@ -34,14 +34,13 @@
 
     <properties>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-      <jacoco-it.agent></jacoco-it.agent>
     </properties>
 
     <dependencies>
         <dependency>
             <groupId>org.apache.maven.surefire</groupId>
             <artifactId>surefire-report-parser</artifactId>
-            <version>3.0.0-M5</version>
+            <version>${surefire.version.used}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -135,12 +134,13 @@
                 </executions>
             </plugin>
             <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <dependencies>
                     <dependency>
                         <groupId>org.apache.maven.surefire</groupId>
                         <artifactId>surefire-shadefire</artifactId>
-                        <version>3.0.0-M4</version> <!-- ${shadedVersion}, but resolved due to https://issues.apache.org/jira/browse/MRELEASE-799 -->
+                        <version>${surefire.version.used}</version> <!-- ${shadedVersion}, but resolved due to https://issues.apache.org/jira/browse/MRELEASE-799 -->
                     </dependency>
                 </dependencies>
                 <configuration>
@@ -172,8 +172,8 @@
             <build>
                 <plugins>
                     <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-failsafe-plugin</artifactId>
-                        <version>3.0.0-M5</version> <!-- ${shadedVersion}, but resolved due to https://issues.apache.org/jira/browse/MRELEASE-799 -->
                         <configuration>
                             <skipTests>${skipTests}</skipTests>
                             <runOrder>alphabetical</runOrder>
@@ -202,13 +202,13 @@
                             <dependency>
                                 <groupId>org.apache.maven.surefire</groupId>
                                 <artifactId>surefire-junit47</artifactId>
-                                <version>3.0.0-M5</version> <!-- ${shadedVersion}, but resolved due to https://issues.apache.org/jira/browse/MRELEASE-799 -->
+                                <version>${surefire.version.used}</version> <!-- ${shadedVersion}, but resolved due to https://issues.apache.org/jira/browse/MRELEASE-799 -->
                             </dependency>
-                          <dependency>
-                            <groupId>org.jacoco</groupId>
-                            <artifactId>org.jacoco.agent</artifactId>
-                            <version>${jacoco.version}</version>
-                          </dependency>
+<!--                          <dependency>-->
+<!--                            <groupId>org.jacoco</groupId>-->
+<!--                            <artifactId>org.jacoco.agent</artifactId>-->
+<!--                            <version>${jacoco.version}</version>-->
+<!--                          </dependency>-->
                         </dependencies>
                         <executions>
                             <execution>
@@ -219,69 +219,23 @@
                             </execution>
                         </executions>
                     </plugin>
+                  <plugin>
+                    <groupId>org.jacoco</groupId>
+                    <artifactId>jacoco-maven-plugin</artifactId>
+                    <executions>
+                      <execution>
+                        <id>jacoco-agent</id>
+                        <goals>
+                          <goal>prepare-agent-integration</goal>
+                        </goals>
+                        <configuration>
+                          <propertyName>jacoco-it.agent</propertyName>
+                        </configuration>
+                      </execution>
+                    </executions>
+                  </plugin>
                 </plugins>
             </build>
         </profile>
-      <profile>
-        <id>ci-reporting</id>
-        <properties>
-          <jacoco.propertyName>jacoco.agent</jacoco.propertyName>
-        </properties>
-        <build>
-          <pluginManagement>
-            <plugins>
-              <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <configuration>
-                  <argLine>${jvm.args.tests} ${jacoco.agent}</argLine>
-                </configuration>
-              </plugin>
-            </plugins>
-          </pluginManagement>
-          <plugins>
-            <plugin>
-              <groupId>org.jacoco</groupId>
-              <artifactId>jacoco-maven-plugin</artifactId>
-              <executions>
-                <execution>
-                  <id>jacoco-agent</id>
-                  <goals>
-                    <goal>prepare-agent</goal>
-                  </goals>
-                </execution>
-                <execution>
-                  <id>jacoco-agent-it</id>
-                  <goals>
-                    <goal>prepare-agent-integration</goal>
-                  </goals>
-                  <configuration>
-                    <propertyName>jacoco-it.agent</propertyName>
-                  </configuration>
-                </execution>
-              </executions>
-            </plugin>
-
-            <plugin>
-              <artifactId>maven-failsafe-plugin</artifactId>
-              <configuration>
-                <systemPropertyVariables>
-                  <jacoco.agent>${jacoco-it.agent}</jacoco.agent>
-                </systemPropertyVariables>
-                <redirectTestOutputToFile>true</redirectTestOutputToFile>
-                <shutdown>kill</shutdown>
-              </configuration>
-              <dependencies>
-                <dependency>
-                  <groupId>org.jacoco</groupId>
-                  <artifactId>org.jacoco.agent</artifactId>
-                  <version>${jacoco.version}</version>
-                </dependency>
-              </dependencies>
-            </plugin>
-
-          </plugins>
-        </build>
-      </profile>
     </profiles>
 </project>
