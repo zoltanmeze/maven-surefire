@@ -197,10 +197,10 @@ def buildProcess(String stageKey, String jdkName, String mvnName, goals, options
 //                         exclusionPattern: "surefire-its/target/**, maven-failsafe-plugin/target/it/**",
 //                         sourceExclusionPattern: ""
 
-                jacoco changeBuildStatus: false,
+                jacoco  ( changeBuildStatus: false,
                         execPattern: '**/target/jacoco*.exec',
                         sourcePattern: sourcesPatternCsv(),
-                        classPattern: classPatternCsv()
+                        classPattern: classPatternCsv() )
 
                 junit(healthScaleFactor: 0.0,
                         allowEmptyResults: true,
