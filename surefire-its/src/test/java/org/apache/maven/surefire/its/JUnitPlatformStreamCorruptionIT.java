@@ -82,4 +82,19 @@ public class JUnitPlatformStreamCorruptionIT
         assertThat( lines )
                 .isEmpty();
     }
+
+    @Test( timeout = 10_000 )
+    public void warningIsNotEmittedWithLogback() throws VerificationException
+    {
+        OutputValidator validator = unpack( "/surefire-2058-stream-corruption" )
+            .executeTest()
+            .verifyErrorFree( 2 );
+
+        List<String> lines = validator.loadLogLines(
+            startsWith( "[WARNING] Corrupted channel by directly writing to native stream in forked JVM" ) );
+
+        assertThat( lines )
+            .isEmpty();
+    }
+
 }
